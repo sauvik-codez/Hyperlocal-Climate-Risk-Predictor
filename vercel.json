@@ -3,7 +3,7 @@
   "installCommand": "npm ci",
   "framework": "nextjs",
   "env": {
-    "CLIMATE_BACKEND_URL": "@climate_backend_url"
+    "CLIMATE_BACKEND_URL": "@https://weather-backend-2rfr.onrender.com"
   },
   "functions": {
     "src/app/api/**/*.ts": {
