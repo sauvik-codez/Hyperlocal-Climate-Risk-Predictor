@@ -1,0 +1,14 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "framework": "nextjs",
+  "env": {
+    "CLIMATE_BACKEND_URL": "@climate_backend_url"
+  },
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30,
+      "memory": 512
+    }
+  }
+}
