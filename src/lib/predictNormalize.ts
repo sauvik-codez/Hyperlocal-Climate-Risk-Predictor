@@ -167,6 +167,7 @@ export function normalizePredictResponse(raw: RawBackend): PredictPayload {
     heat_risk: raw.heat_risk as PredictPayload["heat_risk"],
     air_pollution: raw.air_pollution as PredictPayload["air_pollution"],
     air_gases: raw.air_gases as PredictPayload["air_gases"],
+    aqi_prediction: raw.aqi_prediction as PredictPayload["aqi_prediction"],
   };
 
   if (lstm.days.length > 0 || lstm.probabilities.length > 0) {
