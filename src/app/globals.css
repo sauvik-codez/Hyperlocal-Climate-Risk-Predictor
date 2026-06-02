@@ -1,0 +1,406 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --bg-overlay-top: rgba(255, 255, 255, 0.35);
+  --bg-overlay-bottom: rgba(255, 255, 255, 0.70);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --bg-overlay-top: rgba(10, 10, 10, 0.35);
+    --bg-overlay-bottom: rgba(10, 10, 10, 0.78);
+  }
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.25);
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Background image layer */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url("/images/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.02);
+  filter: saturate(1.12) contrast(1.05);
+}
+
+/* Readability overlays + color wash */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, var(--bg-overlay-top), var(--bg-overlay-bottom)),
+    radial-gradient(1200px 700px at 15% 5%, rgba(59, 130, 246, 0.16), transparent 60%),
+    radial-gradient(900px 600px at 85% 20%, rgba(168, 85, 247, 0.14), transparent 55%),
+    radial-gradient(900px 700px at 50% 100%, rgba(20, 184, 166, 0.12), transparent 60%);
+}
+
+/* Smooth typography + nicer rendering for numeric dashboards */
+html {
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle scrollbar in modern browsers */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
+}
+
+/* Weather scene animations (respects reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes floatSlow {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -6px, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes drift {
+    0% {
+      transform: translate3d(-12%, 0, 0);
+    }
+    100% {
+      transform: translate3d(112%, 0, 0);
+    }
+  }
+
+  @keyframes spinSoft {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.9;
+      transform: scale(1.15);
+    }
+  }
+
+  .ws-float {
+    animation: floatSlow 5.5s ease-in-out infinite;
+  }
+  .ws-spin {
+    animation: spinSoft 18s linear infinite;
+  }
+  .ws-drift-1 {
+    animation: drift 34s linear infinite;
+  }
+  .ws-drift-2 {
+    animation: drift 44s linear infinite;
+  }
+  .ws-twinkle {
+    animation: twinkle 3.2s ease-in-out infinite;
+  }
+
+  @keyframes meteor {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) rotate(-20deg);
+    }
+    8% {
+      opacity: 1;
+    }
+    45% {
+      opacity: 1;
+      transform: translate3d(-260px, 260px, 0) rotate(-20deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(-360px, 360px, 0) rotate(-20deg);
+    }
+  }
+
+  .ws-meteor {
+    animation: meteor 3.8s ease-in-out infinite;
+  }
+
+  @keyframes windSway {
+    0% {
+      transform: rotate(var(--wind-deg, 0deg)) translate3d(0, 0, 0);
+    }
+    50% {
+      transform: rotate(calc(var(--wind-deg, 0deg) + 6deg)) translate3d(0, -1px, 0);
+    }
+    100% {
+      transform: rotate(var(--wind-deg, 0deg)) translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes windFlow {
+    0% {
+      transform: translate3d(-18%, 0, 0);
+      opacity: 0.65;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(180%, 0, 0);
+      opacity: 0.65;
+    }
+  }
+
+  .ws-wind-sway {
+    animation: windSway 2.6s ease-in-out infinite;
+    transform-origin: 50% 50%;
+  }
+
+  .ws-wind-flow {
+    animation: windFlow 2.2s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes sunPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.88;
+      box-shadow: 0 0 28px rgba(255, 223, 93, 0.18);
+    }
+    25% {
+      transform: scale(1.06);
+      opacity: 0.96;
+      box-shadow: 0 0 45px rgba(255, 223, 93, 0.24);
+    }
+    50% {
+      transform: scale(1.12);
+      opacity: 1;
+      box-shadow: 0 0 60px rgba(255, 223, 93, 0.30);
+    }
+    75% {
+      transform: scale(1.06);
+      opacity: 0.96;
+      box-shadow: 0 0 45px rgba(255, 223, 93, 0.24);
+    }
+  }
+
+  .ws-sun-pulse {
+    animation: sunPulse 4.5s ease-in-out infinite;
+    will-change: transform, opacity, box-shadow;
+  }
+
+  @keyframes sunHaloGlow {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.12;
+    }
+    50% {
+      transform: scale(1.15);
+      opacity: 0.22;
+    }
+  }
+
+  .ws-sun-halo {
+    animation: sunHaloGlow 4.5s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes sunRaySpin {
+    0% {
+      transform: rotate(0deg) scale(1);
+      opacity: 0.75;
+    }
+    50% {
+      opacity: 0.92;
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+      opacity: 0.75;
+    }
+  }
+
+  .animate-sun-ray {
+    animation: sunRaySpin 20s linear infinite;
+  }
+
+  .animate-sun-ray-slow {
+    animation: sunRaySpin 34s linear reverse infinite;
+  }
+
+  @keyframes cloudDrift {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(140%);
+    }
+  }
+
+  .ws-cloud-drift-1 {
+    animation: cloudDrift 34s linear infinite;
+  }
+
+  .ws-cloud-drift-2 {
+    animation: cloudDrift 46s linear infinite;
+  }
+
+  .ws-cloud-drift-3 {
+    animation: cloudDrift 56s linear infinite;
+  }
+
+  .ws-cloud-drift-fast {
+    animation: cloudDrift 18s linear infinite;
+  }
+
+  @keyframes heatWave {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.18;
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 0.32;
+    }
+  }
+
+  .ws-heat-wave {
+    animation: heatWave 4.2s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes dustFlow {
+    0% {
+      transform: translateX(-28%) translateY(0) scaleX(0.9);
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: translateX(140%) translateY(-2px) scaleX(1.05);
+      opacity: 0;
+    }
+  }
+
+  .ws-dust-flow {
+    animation: dustFlow 7s linear infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes lightningPulse {
+    0%, 100% {
+      opacity: 0.2;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(2px);
+    }
+  }
+
+  .ws-lightning {
+    animation: lightningPulse 1.3s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6));
+  }
+
+  @keyframes rainFall {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(120%);
+      opacity: 0;
+    }
+  }
+
+  .ws-rain-drop {
+    animation: rainFall 1.1s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  .risk-map-red {
+    animation: riskPulseRed 1.8s ease-in-out infinite;
+  }
+  .risk-map-orange {
+    animation: riskPulseOrange 2s ease-in-out infinite;
+  }
+  .risk-map-yellow {
+    animation: riskPulseYellow 2s ease-in-out infinite;
+  }
+  .risk-map-brown {
+    animation: riskPulseBrown 2.6s ease-in-out infinite;
+  }
+  .risk-map-blue {
+    animation: thunderFlash 1.4s ease-in-out infinite;
+  }
+  .risk-map-green {
+    animation: riskPulseGreen 3s ease-in-out infinite;
+  }
+
+  @keyframes riskPulseRed {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
+  }
+  @keyframes riskPulseOrange {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.28); }
+    50% { transform: scale(1.04); box-shadow: 0 0 0 18px rgba(234, 88, 12, 0); }
+  }
+  @keyframes riskPulseYellow {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.28); }
+    50% { transform: scale(1.04); box-shadow: 0 0 0 18px rgba(234, 179, 8, 0); }
+  }
+  @keyframes riskPulseBrown {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(120, 63, 4, 0.28); }
+    50% { transform: scale(1.03); box-shadow: 0 0 0 18px rgba(120, 63, 4, 0); }
+  }
+  @keyframes thunderFlash {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.35); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(56, 189, 248, 0); }
+  }
+  @keyframes riskPulseGreen {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.25); }
+    50% { transform: scale(1.03); box-shadow: 0 0 0 18px rgba(52, 211, 153, 0); }
+  }
+}
+
