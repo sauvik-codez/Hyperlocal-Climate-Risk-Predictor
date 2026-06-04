@@ -445,9 +445,6 @@ This project contributes toward:
 
 ---
 
-## 👨‍💻 Author
-
-**Sauvik Das**
 
 AI • Machine Learning • Climate Technology • Data Science
 
