@@ -448,7 +448,6 @@ This project contributes toward:
 
 AI • Machine Learning • Climate Technology • Data Science
 
-GitHub: https://github.com/sauvik-codez
 
 ---
 
